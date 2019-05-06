@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <h4>消息发送</h4>
+  输入框<input type="text" class="message">
+  <button id = "send">发送</button>
+  <div class="content">
+
+  </div>
+  <script src="./socket.io.js"></script>
+  <script>
+    var clientSend = document.querySelector('#send')
+    var text = document.querySelector('.message')
+    var content = document.querySelector('.content')
+
+    // 连接指定服务器
+    var socket = io('ws://localhost:4000');
+    clientSend.onclick = () => {
+      let message = text.value
+      // 向服务器指定事件发送数据
+      socket.emit('clientmsg', { message, })
+    }
+    // 监听服务器的返回指定事件数据
+    socket.on('sendSuccess', data => {
+      console.log(data)
+      text.value = ''
+    })
+    socket.on('add', data => {
+      let div = document.createElement('div')
+      div.innerText = data
+      content.appendChild(div)
+    })
+    
+  </script>
+</body>
+</html>

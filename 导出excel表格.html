@@ -1,0 +1,68 @@
+<html>
+<head>
+  <p style="font-size: 20px;color: red;">使用a标签方式将json导出csv文件</p>
+  <button onclick='tableToExcel()'>导出</button>
+</head>
+<body>
+    <table id="table">
+        <tr>
+            <td>a</td>
+            <td>b</td>
+            <td>c</td>
+            <td>d</td>
+            <td>e</td>
+        </tr>
+        <tr>
+            <td>1.0</td>
+            <td>1.1</td>
+            <td>1.2</td>
+            <td>1.3</td>
+            <td>1.4</td>
+        </tr>
+        <tr>
+            <td>2.0</td>
+            <td>2.1</td>
+            <td>2.2</td>
+            <td>2.3</td>
+            <td>2.4</td>
+        </tr>
+    </table>
+  <script>
+    function tableToExcel(){
+      let table = document.querySelector('#table')
+      // 行
+      console.log(table.rows)
+      // 列
+      console.log(table.rows[0].cells)
+      // 单元格
+      console.log(table.rows[0].cells[0].innerHTML)
+      // 获取行数和列数
+      let rowLength = table.rows.length
+      let cellLength = table.rows[0].cells.length
+
+      //遍历数据
+      //增加\t为了不让表格显示科学计数法或者其他格式
+      let str = ''
+      for(let i = 0; i < rowLength; i++){
+          for(let j = 0; j < cellLength; j++){
+          str += j === cellLength-1 ? table.rows[i].cells[j].innerHTML : table.rows[i].cells[j].innerHTML + ','
+          }
+          str += '\n'
+      }
+      console.log(str)
+
+      //encodeURIComponent解决中文乱码
+      let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
+      //通过创建a标签实现
+      let link = document.createElement("a");
+      link.href = uri;
+      //对下载的文件命名
+      link.download =  "json数据表.csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+ 
+</script>
+</body>
+</html>
